@@ -28,6 +28,10 @@ function WarningIcon() {
   )
 }
 
+const ICON_BUTTON_BASE = 'flex size-16 items-center justify-center rounded-full transition-colors'
+const ICON_ACTIVE = 'bg-primary text-canvas-dark'
+const ICON_INACTIVE = 'text-mute'
+
 /**
  * `carplay-sidebar` from DESIGN-checkup.md: a narrow icon rail (88px),
  * icon-only — no text labels. This is deliberate, not an omission: at
@@ -35,6 +39,12 @@ function WarningIcon() {
  * 88px-wide rail without wrapping, and the doc describes this as an icon
  * rail, in contrast to bottom-tab-bar's icon+label pattern. Accessible
  * names live in aria-label instead of visible text.
+ *
+ * The active state is a solid filled circle (bright green fill, dark
+ * icon), not just a text-color change — a hue-only cue is unreliable in
+ * direct sunlight/glare, the exact condition CarPlay is used in. A filled
+ * shape survives on luminance/contrast alone, which glare doesn't wash out
+ * the way a subtle color shift does.
  */
 export function CarPlaySidebar({
   active,
@@ -50,9 +60,7 @@ export function CarPlaySidebar({
         onClick={() => onSelect('calls')}
         aria-label="Live Calls"
         aria-pressed={active === 'calls'}
-        className={`flex size-16 items-center justify-center rounded-lg transition-colors ${
-          active === 'calls' ? 'text-primary' : 'text-mute'
-        }`}
+        className={`${ICON_BUTTON_BASE} ${active === 'calls' ? ICON_ACTIVE : ICON_INACTIVE}`}
       >
         <PhoneIcon />
       </button>
@@ -62,9 +70,7 @@ export function CarPlaySidebar({
         onClick={() => onSelect('escalations')}
         aria-label="Escalations"
         aria-pressed={active === 'escalations'}
-        className={`flex size-16 items-center justify-center rounded-lg transition-colors ${
-          active === 'escalations' ? 'text-primary' : 'text-mute'
-        }`}
+        className={`${ICON_BUTTON_BASE} ${active === 'escalations' ? ICON_ACTIVE : ICON_INACTIVE}`}
       >
         <WarningIcon />
       </button>
