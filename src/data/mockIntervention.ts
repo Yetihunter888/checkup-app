@@ -18,6 +18,8 @@ export const lastThreeNotes: Comment[] = [
     timestampSeconds: 118,
     tag: 'policy-error',
     author: 'ai',
+    authorName: 'AI',
+    createdAt: '2026-09-06T09:47:00',
     text: 'Fee waiver policy was not offered even though the customer qualifies.',
   },
   {
@@ -25,6 +27,8 @@ export const lastThreeNotes: Comment[] = [
     timestampSeconds: 142,
     tag: 'coaching',
     author: 'ai',
+    authorName: 'AI',
+    createdAt: '2026-09-06T09:47:00',
     text: 'Agent talked over the customer twice in the last two minutes.',
   },
   {
@@ -32,6 +36,8 @@ export const lastThreeNotes: Comment[] = [
     timestampSeconds: 160,
     tag: 'escalation',
     author: 'director',
+    authorName: 'Alicia Grant',
+    createdAt: '2026-09-06T09:52:00',
     text: 'Customer has asked for a supervisor twice now.',
   },
 ]

@@ -27,6 +27,7 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
   const [speed, setSpeed] = useState(1)
   const [skipSilence, setSkipSilence] = useState(false)
   const [activeCommentId, setActiveCommentId] = useState<string | null>(null)
+  const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null)
   const [sheet, setSheet] = useState<SheetState>('closed')
   const [taggedSupervisor, setTaggedSupervisor] = useState('')
 
@@ -86,11 +87,13 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
             comments={call.comments}
             silenceRanges={call.silenceRanges}
             activeCommentId={activeCommentId}
+            hoveredCommentId={hoveredCommentId}
             onSeek={seekTo}
             onSelectComment={(id) => {
               const comment = call.comments.find((c) => c.id === id)
               if (comment) selectComment(comment)
             }}
+            onHoverComment={setHoveredCommentId}
           />
           <SentimentTrack segments={call.sentimentTrack} durationSeconds={call.durationSeconds} />
         </div>
@@ -107,7 +110,13 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
 
         <div className="flex flex-col gap-sm">
           <span className="type-caption-md text-mute">Transcript Notes</span>
-          <CommentFeed comments={call.comments} activeCommentId={activeCommentId} onSelect={selectComment} />
+          <CommentFeed
+            comments={call.comments}
+            activeCommentId={activeCommentId}
+            hoveredCommentId={hoveredCommentId}
+            onSelect={selectComment}
+            onHoverComment={setHoveredCommentId}
+          />
         </div>
       </main>
 

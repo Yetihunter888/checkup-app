@@ -8,6 +8,10 @@ export interface Comment {
   timestampSeconds: number
   tag: CommentTag
   author: NoteAuthor
+  /** The actual person's name for supervisor/director notes (e.g. "Jamie Torres"); just "AI" for AI-authored ones — there's no person behind those. */
+  authorName: string
+  /** ISO timestamp of when the note was added — distinct from timestampSeconds, which is the note's position in the call. */
+  createdAt: string
   text: string
 }
 

@@ -21,6 +21,8 @@ export const mockCallDetail: CallDetail = {
       timestampSeconds: 32,
       tag: 'coaching',
       author: 'ai',
+      authorName: 'AI',
+      createdAt: '2026-09-03T14:32:00',
       text: 'Agent skipped the standard greeting disclosure — worth a coaching note on call openings.',
     },
     {
@@ -28,6 +30,8 @@ export const mockCallDetail: CallDetail = {
       timestampSeconds: 95,
       tag: 'great-win',
       author: 'supervisor',
+      authorName: 'Jamie Torres',
+      createdAt: '2026-09-04T10:05:00',
       text: "Great empathy statement — acknowledged the customer's frustration before explaining the fee.",
     },
     {
@@ -35,6 +39,8 @@ export const mockCallDetail: CallDetail = {
       timestampSeconds: 161,
       tag: 'compliance-risk',
       author: 'ai',
+      authorName: 'AI',
+      createdAt: '2026-09-03T14:32:00',
       text: 'Identity verification was not confirmed before account details were discussed.',
     },
     {
@@ -42,6 +48,8 @@ export const mockCallDetail: CallDetail = {
       timestampSeconds: 238,
       tag: 'escalation',
       author: 'director',
+      authorName: 'Alicia Grant',
+      createdAt: '2026-09-05T16:20:00',
       text: 'Customer threatened to cancel. Please review with Maria this week.',
     },
   ],

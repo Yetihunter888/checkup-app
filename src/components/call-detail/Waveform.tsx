@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { TAG_CONFIG } from './tagColors'
 import { generateBarHeights } from './waveformShape'
+import { formatNoteDate } from '../../lib/format'
 import type { Comment, SilenceRange } from '../../types/call-detail'
 
 const BAR_COUNT = 90
@@ -24,16 +25,20 @@ export function Waveform({
   comments,
   silenceRanges,
   activeCommentId,
+  hoveredCommentId,
   onSeek,
   onSelectComment,
+  onHoverComment,
 }: {
   durationSeconds: number
   currentTimeSeconds: number
   comments: Comment[]
   silenceRanges: SilenceRange[]
   activeCommentId: string | null
+  hoveredCommentId: string | null
   onSeek: (seconds: number) => void
   onSelectComment: (id: string) => void
+  onHoverComment: (id: string | null) => void
 }) {
   const trackRef = useRef<HTMLDivElement>(null)
 
@@ -46,6 +51,7 @@ export function Waveform({
   }
 
   const playedRatio = currentTimeSeconds / durationSeconds
+  const hoveredComment = comments.find((comment) => comment.id === hoveredCommentId) ?? null
 
   return (
     <div className="rounded-lg bg-surface-sunken p-lg">
@@ -85,6 +91,7 @@ export function Waveform({
         {comments.map((comment) => {
           const config = TAG_CONFIG[comment.tag]
           const isActive = comment.id === activeCommentId
+          const isHovered = comment.id === hoveredCommentId
           return (
             <button
               key={comment.id}
@@ -93,17 +100,31 @@ export function Waveform({
                 event.stopPropagation()
                 onSelectComment(comment.id)
               }}
+              onMouseEnter={() => onHoverComment(comment.id)}
+              onMouseLeave={() => onHoverComment(null)}
               className="absolute top-0 flex -translate-x-1/2 flex-col items-center gap-1"
               style={{ left: pct(comment.timestampSeconds, durationSeconds) }}
               aria-label={`${config.label} comment at ${comment.timestampSeconds}s`}
             >
               <span
-                className={`size-2.5 rounded-full ${config.dot} ${isActive ? 'ring-2 ring-ink' : ''}`}
+                className={`size-2.5 rounded-full ${config.dot} ${
+                  isActive ? 'ring-2 ring-ink' : isHovered ? 'ring-2 ring-ink/60' : ''
+                }`}
               />
               <span className={`w-px flex-1 ${config.dot} opacity-40`} />
             </button>
           )
         })}
+
+        {hoveredComment && (
+          <div
+            className="shadow-modal pointer-events-none absolute top-0 z-20 flex -translate-x-1/2 -translate-y-[calc(100%+8px)] flex-col gap-0.5 whitespace-nowrap rounded-md border border-hairline bg-surface-elevated px-sm py-xs"
+            style={{ left: pct(hoveredComment.timestampSeconds, durationSeconds) }}
+          >
+            <span className="type-caption-sm font-semibold text-ink">{hoveredComment.authorName}</span>
+            <span className="type-caption-sm text-mute">{formatNoteDate(hoveredComment.createdAt)}</span>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -30,6 +30,7 @@ export function CallDetailScreen({
   const [speed, setSpeed] = useState(1)
   const [skipSilence, setSkipSilence] = useState(false)
   const [activeCommentId, setActiveCommentId] = useState<string | null>(null)
+  const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isPlaying) return
@@ -71,6 +72,8 @@ export function CallDetailScreen({
       timestampSeconds: Math.round(currentTime),
       tag: 'coaching',
       author: 'supervisor',
+      authorName: 'You',
+      createdAt: new Date().toISOString(),
       text,
     }
     setComments((current) => [...current, comment])
@@ -105,11 +108,13 @@ export function CallDetailScreen({
             comments={comments}
             silenceRanges={call.silenceRanges}
             activeCommentId={activeCommentId}
+            hoveredCommentId={hoveredCommentId}
             onSeek={seekTo}
             onSelectComment={(id) => {
               const comment = comments.find((c) => c.id === id)
               if (comment) selectComment(comment)
             }}
+            onHoverComment={setHoveredCommentId}
           />
           <SentimentTrack segments={call.sentimentTrack} durationSeconds={call.durationSeconds} />
         </div>
@@ -128,7 +133,13 @@ export function CallDetailScreen({
           <span className="type-caption-md text-mute">
             {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
           </span>
-          <CommentFeed comments={comments} activeCommentId={activeCommentId} onSelect={selectComment} />
+          <CommentFeed
+            comments={comments}
+            activeCommentId={activeCommentId}
+            hoveredCommentId={hoveredCommentId}
+            onSelect={selectComment}
+            onHoverComment={setHoveredCommentId}
+          />
         </div>
       </main>
 
