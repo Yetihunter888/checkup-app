@@ -21,6 +21,8 @@ export interface Group {
   name: string
   kind: GroupKind
   metric: GroupMetric
-  contactType: ContactType
+  /** A team can handle more than one contact type at once (e.g. Inbound Call + Chat). */
+  contactTypes: ContactType[]
+  teamLead: string
   members: GroupMember[]
 }

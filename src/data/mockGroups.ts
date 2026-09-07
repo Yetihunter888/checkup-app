@@ -39,7 +39,9 @@ export const initialGroups: Group[] = [
     name: 'Team East',
     kind: 'static',
     metric: { label: 'Avg QA Score', value: '91%' },
-    contactType: 'inbound-call',
+    // Handles two contact types — the multi-type case: Inbound Call + Chat.
+    contactTypes: ['inbound-call', 'chat'],
+    teamLead: 'Jordan Blake',
     members: membersOf(['m-maria', 'm-priya', 'm-theo', 'm-grace', 'm-luis']),
   },
   {
@@ -47,7 +49,8 @@ export const initialGroups: Group[] = [
     name: 'Billing Specialists',
     kind: 'static',
     metric: { label: 'CSAT', value: '4.6' },
-    contactType: 'email',
+    contactTypes: ['email'],
+    teamLead: 'Casey Nguyen',
     members: membersOf(['m-devon', 'm-elle', 'm-ana', 'm-ravi']),
   },
   {
@@ -55,7 +58,8 @@ export const initialGroups: Group[] = [
     name: 'Team West',
     kind: 'static',
     metric: { label: 'Avg QA Score', value: '87%' },
-    contactType: 'outbound-call',
+    contactTypes: ['outbound-call'],
+    teamLead: 'Marcus Chen',
     members: membersOf(['m-sam', 'm-carlos', 'm-nadia', 'm-ben']),
   },
   {
@@ -63,7 +67,8 @@ export const initialGroups: Group[] = [
     name: 'Retention',
     kind: 'static',
     metric: { label: 'CSAT', value: '4.3' },
-    contactType: 'chat',
+    contactTypes: ['chat'],
+    teamLead: 'Elena Vasquez',
     members: membersOf(['m-jonah', 'm-katrina', 'm-farah']),
   },
   {
@@ -71,7 +76,8 @@ export const initialGroups: Group[] = [
     name: 'Spanish Bilingual',
     kind: 'dynamic',
     metric: { label: 'Avg QA Score', value: '89%' },
-    contactType: 'social',
+    contactTypes: ['social'],
+    teamLead: 'Jordan Blake',
     members: membersOf(['m-maria', 'm-ana', 'm-carlos', 'm-farah']),
   },
   {
@@ -79,7 +85,8 @@ export const initialGroups: Group[] = [
     name: 'Tier 2 Escalations',
     kind: 'dynamic',
     metric: { label: 'CSAT', value: '4.1' },
-    contactType: 'work-item',
+    contactTypes: ['work-item'],
+    teamLead: 'Marcus Chen',
     members: membersOf(['m-jonah', 'm-priya', 'm-devon']),
   },
 ]

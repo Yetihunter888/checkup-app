@@ -20,10 +20,12 @@ export function mergeGroups(a: Group, b: Group, mergedName: string): Group {
     name: mergedName,
     kind: 'static',
     metric: averageMetric(a.metric, b.metric),
-    // Inherits the first group's contact type — there's no meaningful way
-    // to "average" Inbound Call and Email, so this picks one deterministically
-    // rather than guessing at a rule the product hasn't defined.
-    contactType: a.contactType,
+    // Union of both groups' contact types (deduped) — the merged team now
+    // legitimately handles whatever either original team handled.
+    contactTypes: Array.from(new Set([...a.contactTypes, ...b.contactTypes])),
+    // Inherits the first group's lead — there's no rule for who "wins" a
+    // merge, so this picks one deterministically rather than guessing.
+    teamLead: a.teamLead,
     members: Array.from(memberMap.values()),
   }
 }

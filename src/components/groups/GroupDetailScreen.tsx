@@ -28,6 +28,14 @@ export function GroupDetailScreen({
         </div>
       </div>
 
+      <div className="flex items-center gap-md rounded-lg bg-surface p-lg">
+        <Avatar name={group.teamLead} />
+        <div className="flex min-w-0 flex-col gap-xxs">
+          <span className="type-caption-md text-mute">Team Lead</span>
+          <span className="type-card-title truncate text-ink">{group.teamLead}</span>
+        </div>
+      </div>
+
       <div className="flex items-center gap-lg rounded-lg bg-surface p-lg">
         <div className="flex -space-x-3">
           {preview.map((member) => (

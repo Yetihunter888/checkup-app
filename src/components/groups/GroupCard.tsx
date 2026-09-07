@@ -52,8 +52,10 @@ export function GroupCard({
 
       <div className="flex w-full flex-col gap-xxs pr-6">
         <div className="flex items-center gap-xs text-mute">
-          <ContactTypeIcon type={group.contactType} />
           <span className="type-card-title text-ink">{group.name}</span>
+          {group.contactTypes.map((type) => (
+            <ContactTypeIcon key={type} type={type} />
+          ))}
         </div>
         {group.kind === 'dynamic' && <GroupKindBadge />}
       </div>
@@ -61,6 +63,8 @@ export function GroupCard({
       <span className="type-body-sm text-mute">
         {group.members.length} {group.members.length === 1 ? 'member' : 'members'}
       </span>
+
+      <span className="type-caption-sm text-mute">Led by {group.teamLead}</span>
 
       <MemberStatusBreakdown members={group.members} />
 
