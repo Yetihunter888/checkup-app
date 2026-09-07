@@ -4,6 +4,7 @@ import { FilterBar } from './FilterBar'
 import { KpiCard } from './KpiCard'
 import { KpiTrendChart } from './KpiTrendChart'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { kpis } from '../../data/mockAnalytics'
 import { filterVariation, generateHistory } from '../../lib/kpiTrend'
@@ -20,7 +21,7 @@ const DEFAULT_FILTERS: AnalyticsFilters = {
   channel: 'all',
 }
 
-export function AnalyticsDashboardScreen() {
+export function AnalyticsDashboardScreen({ onNavigateTab }: { onNavigateTab: (tab: TabId) => void }) {
   const [filters, setFilters] = useState<AnalyticsFilters>(DEFAULT_FILTERS)
   const [selectedKpiId, setSelectedKpiId] = useState(kpis[3].id) // QA Average by default
 
@@ -86,7 +87,7 @@ export function AnalyticsDashboardScreen() {
         />
       </main>
 
-      <BottomTabBar />
+      <BottomTabBar active="reports" onNavigate={onNavigateTab} />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { CallList } from './CallList'
 import { FilterBar } from './FilterBar'
@@ -7,7 +8,13 @@ import { QueueHealthStrip } from './QueueHealthStrip'
 import { calls, queueHealth, savedViews } from '../../data/mockCalls'
 import type { Call } from '../../types/live-feed'
 
-export function LiveCallFeedScreen({ onSelectCall }: { onSelectCall?: (call: Call) => void }) {
+export function LiveCallFeedScreen({
+  onSelectCall,
+  onNavigateTab,
+}: {
+  onSelectCall?: (call: Call) => void
+  onNavigateTab: (tab: TabId) => void
+}) {
   const [activeViewId, setActiveViewId] = useState(savedViews[0].id)
 
   const filteredCalls = useMemo(() => {
@@ -38,7 +45,7 @@ export function LiveCallFeedScreen({ onSelectCall }: { onSelectCall?: (call: Cal
         <CallList calls={filteredCalls} onSelectCall={handleSelectCall} />
       </main>
 
-      <BottomTabBar />
+      <BottomTabBar active="feed" onNavigate={onNavigateTab} />
     </div>
   )
 }

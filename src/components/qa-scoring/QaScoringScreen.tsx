@@ -6,12 +6,19 @@ import { TrendSparkline } from './TrendSparkline'
 import { BackButton } from '../ui/BackButton'
 import { QuotaProgress } from '../ui/QuotaProgress'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { mockQaScorecard } from '../../data/mockQaScorecard'
 import { weightedTotal } from '../../lib/scoring'
 import type { ScoreCategory } from '../../types/qa-scoring'
 
-export function QaScoringScreen({ onBack }: { onBack: () => void }) {
+export function QaScoringScreen({
+  onBack,
+  onNavigateTab,
+}: {
+  onBack: () => void
+  onNavigateTab: (tab: TabId) => void
+}) {
   const scorecard = mockQaScorecard
   const [categories, setCategories] = useState<ScoreCategory[]>(scorecard.categories)
 
@@ -59,7 +66,7 @@ export function QaScoringScreen({ onBack }: { onBack: () => void }) {
         />
       </div>
 
-      <BottomTabBar />
+      <BottomTabBar active="feed" onNavigate={onNavigateTab} />
     </div>
   )
 }

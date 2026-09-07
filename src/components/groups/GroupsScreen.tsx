@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { GroupCard } from './GroupCard'
 import { GroupDetailScreen } from './GroupDetailScreen'
@@ -10,7 +11,7 @@ import { initialGroups } from '../../data/mockGroups'
 import { mergeGroups } from '../../lib/mergeGroups'
 import type { Group } from '../../types/groups'
 
-export function GroupsScreen() {
+export function GroupsScreen({ onNavigateTab }: { onNavigateTab: (tab: TabId) => void }) {
   const [groups, setGroups] = useState<Group[]>(initialGroups)
   const [openGroupId, setOpenGroupId] = useState<string | null>(null)
   const [selectMode, setSelectMode] = useState(false)
@@ -104,7 +105,7 @@ export function GroupsScreen() {
         />
       )}
 
-      <BottomTabBar />
+      <BottomTabBar active="groups" onNavigate={onNavigateTab} />
     </div>
   )
 }

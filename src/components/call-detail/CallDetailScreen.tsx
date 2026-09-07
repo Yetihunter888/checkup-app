@@ -6,6 +6,7 @@ import { PlaybackControls } from './PlaybackControls'
 import { SentimentTrack } from './SentimentTrack'
 import { Waveform } from './Waveform'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { mockCallDetail } from '../../data/mockCallDetail'
 import type { Comment } from '../../types/call-detail'
@@ -16,9 +17,11 @@ const TICK_MS = 250
 export function CallDetailScreen({
   onBack,
   onOpenScoring,
+  onNavigateTab,
 }: {
   onBack: () => void
   onOpenScoring: () => void
+  onNavigateTab: (tab: TabId) => void
 }) {
   const call = mockCallDetail
   const [comments, setComments] = useState<Comment[]>(call.comments)
@@ -133,7 +136,7 @@ export function CallDetailScreen({
         <AddCommentBar onSubmit={addComment} onVoiceMemo={() => console.log('start voice memo')} />
       </div>
 
-      <BottomTabBar />
+      <BottomTabBar active="feed" onNavigate={onNavigateTab} />
     </div>
   )
 }

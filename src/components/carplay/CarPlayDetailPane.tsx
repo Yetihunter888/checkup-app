@@ -37,6 +37,10 @@ export function CarPlayDetailPane({ call, onClose }: { call: Call | null; onClos
           // requires this prop, so it's intentionally a no-op here, not an
           // oversight.
           onOpenScoring={() => {}}
+          // Same reasoning: CallDetailScreen's BottomTabBar has no
+          // equivalent "Feed/Groups/Tasks/Reports" concept inside the
+          // CarPlay shell — intentionally a no-op, not a missed wire-up.
+          onNavigateTab={() => {}}
         />
       </div>
     )

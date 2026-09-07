@@ -1,4 +1,4 @@
-import { useState } from 'react'
+export type TabId = 'feed' | 'groups' | 'tasks' | 'reports'
 
 const TABS = [
   {
@@ -51,12 +51,25 @@ const TABS = [
       />
     ),
   },
-] as const
+] as const satisfies readonly { id: TabId; label: string; icon: React.ReactNode }[]
 
-/** `bottom-tab-bar` from DESIGN-checkup.md — dark surface, green active icon. */
-export function BottomTabBar() {
-  const [active, setActive] = useState<string>('feed')
-
+/**
+ * `bottom-tab-bar` from DESIGN-checkup.md — dark surface, green active icon.
+ *
+ * `active` and `onNavigate` are owned by the screen rendering this bar (and
+ * ultimately by App.tsx's screen-switching state), not by this component —
+ * it previously tracked its own local `active` state with no callback prop
+ * at all, so tapping Tasks/Reports only recolored an icon and never
+ * navigated anywhere. This is a real behavior change for every existing
+ * call site, all six of which have been updated alongside this file.
+ */
+export function BottomTabBar({
+  active,
+  onNavigate,
+}: {
+  active: TabId
+  onNavigate: (tab: TabId) => void
+}) {
   return (
     <nav className="flex h-16 shrink-0 items-center justify-around border-t border-hairline bg-surface">
       {TABS.map((tab) => {
@@ -65,7 +78,7 @@ export function BottomTabBar() {
           <button
             key={tab.id}
             type="button"
-            onClick={() => setActive(tab.id)}
+            onClick={() => onNavigate(tab.id)}
             className={`flex flex-1 flex-col items-center gap-xxs py-xs ${
               isActive ? 'text-primary' : 'text-mute'
             }`}

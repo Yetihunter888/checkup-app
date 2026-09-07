@@ -4,10 +4,11 @@ import { EscalationsSection } from './EscalationsSection'
 import { FlaggedCallsSection } from './FlaggedCallsSection'
 import { QaQuotaSection } from './QaQuotaSection'
 import { BottomTabBar } from '../layout/BottomTabBar'
+import type { TabId } from '../layout/BottomTabBar'
 import { TopHeader } from '../layout/TopHeader'
 import { SavedViewChip } from '../ui/Chip'
 
-export function TaskDashboardScreen() {
+export function TaskDashboardScreen({ onNavigateTab }: { onNavigateTab: (tab: TabId) => void }) {
   const [completedIds, setCompletedIds] = useState<Set<string>>(new Set())
   const [priorityFilter, setPriorityFilter] = useState<'all' | 'high'>('all')
 
@@ -44,7 +45,7 @@ export function TaskDashboardScreen() {
         <EscalationsSection completedIds={completedIds} onComplete={completeItem} priorityFilter={priorityFilter} />
       </main>
 
-      <BottomTabBar />
+      <BottomTabBar active="tasks" onNavigate={onNavigateTab} />
     </div>
   )
 }
