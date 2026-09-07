@@ -7,7 +7,7 @@ import { QueueHealthStrip } from './QueueHealthStrip'
 import { calls, queueHealth, savedViews } from '../../data/mockCalls'
 import type { Call } from '../../types/live-feed'
 
-export function LiveCallFeedScreen() {
+export function LiveCallFeedScreen({ onSelectCall }: { onSelectCall?: (call: Call) => void }) {
   const [activeViewId, setActiveViewId] = useState(savedViews[0].id)
 
   const filteredCalls = useMemo(() => {
@@ -21,9 +21,7 @@ export function LiveCallFeedScreen() {
   }, [activeViewId])
 
   function handleSelectCall(call: Call) {
-    // Opens the listen action for the call; wired up once the Call Detail
-    // screen (Prompt 4) exists.
-    console.log('listen ->', call.id)
+    onSelectCall?.(call)
   }
 
   return (

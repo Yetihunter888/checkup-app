@@ -1,4 +1,5 @@
 import { Avatar } from '../ui/Avatar'
+import { CardAccentBar } from '../ui/CardAccentBar'
 import { NoteBadge } from '../ui/NoteBadge'
 import { SentimentDot } from '../ui/SentimentDot'
 import { AttentionBadge, StatusBadge } from '../ui/StatusBadge'
@@ -26,35 +27,36 @@ function ListenAffordance() {
  */
 export function CallRow({ call, onSelect }: { call: Call; onSelect: (call: Call) => void }) {
   return (
-    <button
-      type="button"
-      onClick={() => onSelect(call)}
-      className={`group flex w-full items-center gap-md rounded-lg bg-surface px-lg py-[14px] text-left transition-colors hover:bg-surface-elevated hover:ring-1 hover:ring-primary focus-visible:bg-surface-elevated focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
-        call.needsAttention ? 'border-l-[3px] border-status-escalation' : ''
-      }`}
-    >
-      <Avatar name={call.agentName} />
+    <button type="button" onClick={() => onSelect(call)} className="group flex w-full text-left outline-none">
+      {call.needsAttention && <CardAccentBar colorClassName="bg-status-escalation" />}
+      <div
+        className={`flex flex-1 items-center gap-md bg-surface px-lg py-[14px] transition-colors group-hover:bg-surface-elevated group-hover:ring-1 group-hover:ring-primary group-focus-visible:bg-surface-elevated group-focus-visible:ring-1 group-focus-visible:ring-primary ${
+          call.needsAttention ? 'rounded-r-lg' : 'rounded-lg'
+        }`}
+      >
+        <Avatar name={call.agentName} />
 
-      <div className="flex min-w-0 flex-1 flex-col gap-xxs">
-        <div className="flex items-center gap-sm">
-          <span className="type-card-title truncate text-ink">{call.agentName}</span>
-          <SentimentDot sentiment={call.sentiment} />
-        </div>
-        <div className="flex items-center justify-between gap-sm">
-          <span className="type-body-sm truncate text-mute">
-            {call.team} · {formatDuration(call.durationSeconds)}
-          </span>
-          <StatusBadge status={call.status} />
-        </div>
-        {call.needsAttention && (
-          <div className="flex flex-wrap items-center gap-xs pt-xxs">
-            <NoteBadge author="ai" />
-            <AttentionBadge />
+        <div className="flex min-w-0 flex-1 flex-col gap-xxs">
+          <div className="flex items-center gap-sm">
+            <span className="type-card-title truncate text-ink">{call.agentName}</span>
+            <SentimentDot sentiment={call.sentiment} />
           </div>
-        )}
-      </div>
+          <div className="flex items-center justify-between gap-sm">
+            <span className="type-body-sm truncate text-mute">
+              {call.team} · {formatDuration(call.durationSeconds)}
+            </span>
+            <StatusBadge status={call.status} />
+          </div>
+          {call.needsAttention && (
+            <div className="flex flex-wrap items-center gap-xs pt-xxs">
+              <NoteBadge author="ai" />
+              <AttentionBadge />
+            </div>
+          )}
+        </div>
 
-      <ListenAffordance />
+        <ListenAffordance />
+      </div>
     </button>
   )
 }
