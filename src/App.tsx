@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { CallDetailScreen } from './components/call-detail/CallDetailScreen'
+import { DirectorCallReviewScreen } from './components/director/DirectorCallReviewScreen'
 import { GroupsScreen } from './components/groups/GroupsScreen'
 import { LiveInterventionScreen } from './components/intervention/LiveInterventionScreen'
 import { LiveCallFeedScreen } from './components/live-feed/LiveCallFeedScreen'
 import { QaScoringScreen } from './components/qa-scoring/QaScoringScreen'
 
-type Screen = 'feed' | 'groups' | 'call-detail' | 'qa-scoring' | 'intervention'
+type Screen = 'feed' | 'groups' | 'call-detail' | 'qa-scoring' | 'intervention' | 'director'
 
 // Dev-only screen switcher — there's no router yet, so this is scaffolding
 // to reach the built screens, not part of the Check Up design system.
@@ -43,6 +44,13 @@ function App() {
           >
             Intervene
           </button>
+          <button
+            type="button"
+            onClick={() => setScreen('director')}
+            className="type-caption-sm rounded-full px-md py-xs text-mute"
+          >
+            Director
+          </button>
         </div>
       )}
 
@@ -53,6 +61,7 @@ function App() {
       )}
       {screen === 'qa-scoring' && <QaScoringScreen onBack={() => setScreen('call-detail')} />}
       {screen === 'intervention' && <LiveInterventionScreen onBack={() => setScreen('feed')} />}
+      {screen === 'director' && <DirectorCallReviewScreen onBack={() => setScreen('feed')} />}
     </div>
   )
 }
