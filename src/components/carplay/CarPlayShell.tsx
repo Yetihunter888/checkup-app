@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { CarPlayCallListScreen } from './CarPlayCallListScreen'
+import { CarPlayDetailPane } from './CarPlayDetailPane'
 import { CarPlaySidebar } from './CarPlaySidebar'
 import type { SidebarView } from './CarPlaySidebar'
-import { LiveInterventionScreen } from '../intervention/LiveInterventionScreen'
 import type { Call } from '../../types/live-feed'
 
 /**
@@ -16,36 +16,27 @@ import type { Call } from '../../types/live-feed'
  * until it's been through Xcode's CarPlay simulator and a real head unit —
  * this is the one part of the app where a layout mistake has real-world
  * consequences while someone is driving.
+ *
+ * Three-pane head-unit layout (icon rail / list / detail), all visible at
+ * once — this is a CarPlay-appropriate wide-format layout, not the
+ * full-screen push/replace navigation the rest of this app uses on a
+ * narrow phone screen. Selecting a row never unmounts the list; it just
+ * updates which call the third pane shows.
  */
 export function CarPlayShell() {
   const [view, setView] = useState<SidebarView>('calls')
   const [selectedCall, setSelectedCall] = useState<Call | null>(null)
 
-  // LiveInterventionScreen's CarPlay branch (deliberately unmodified —
-  // see the note above) renders no back control at all, only its mobile
-  // branch does. So the sidebar has to be able to exit the detail view on
-  // its own: selecting either destination here always returns to that
-  // destination's list, never leaves selectedCall dangling with no way out.
   function selectSidebarView(next: SidebarView) {
     setView(next)
     setSelectedCall(null)
   }
 
-  if (selectedCall) {
-    return (
-      <div className="flex h-dvh w-full">
-        <CarPlaySidebar active={view} onSelect={selectSidebarView} />
-        <div className="flex-1">
-          <LiveInterventionScreen onBack={() => setSelectedCall(null)} />
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex h-dvh w-full">
       <CarPlaySidebar active={view} onSelect={selectSidebarView} />
-      <CarPlayCallListScreen view={view} onSelectCall={setSelectedCall} />
+      <CarPlayCallListScreen view={view} selectedCallId={selectedCall?.id ?? null} onSelectCall={setSelectedCall} />
+      <CarPlayDetailPane call={selectedCall} onClose={() => setSelectedCall(null)} />
     </div>
   )
 }

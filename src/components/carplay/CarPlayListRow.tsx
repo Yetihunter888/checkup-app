@@ -19,7 +19,15 @@ const DRAG_THRESHOLD_PX = 10
  * captures the start position; if pointerup lands more than
  * DRAG_THRESHOLD_PX away, the click is treated as a scroll and suppressed.
  */
-export function CarPlayListRow({ call, onSelect }: { call: Call; onSelect: (call: Call) => void }) {
+export function CarPlayListRow({
+  call,
+  selected,
+  onSelect,
+}: {
+  call: Call
+  selected: boolean
+  onSelect: (call: Call) => void
+}) {
   const pointerDownPos = useRef<{ x: number; y: number } | null>(null)
   const wasDrag = useRef(false)
 
@@ -56,9 +64,9 @@ export function CarPlayListRow({ call, onSelect }: { call: Call; onSelect: (call
     >
       {call.needsAttention && <CardAccentBar colorClassName="bg-status-escalation" />}
       <div
-        className={`flex min-h-[88px] flex-1 items-center justify-between gap-lg bg-surface px-lg py-md ${
+        className={`flex min-h-[88px] flex-1 items-center justify-between gap-lg px-lg py-md transition-colors ${
           call.needsAttention ? 'rounded-r-md' : 'rounded-md'
-        }`}
+        } ${selected ? 'bg-surface-elevated ring-2 ring-primary' : 'bg-surface'}`}
       >
         <div className="flex min-w-0 flex-col gap-xxs">
           <span className="type-carplay-md truncate text-ink">{call.agentName}</span>
