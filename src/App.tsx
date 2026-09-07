@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AnalyticsDashboardScreen } from './components/analytics/AnalyticsDashboardScreen'
 import { CallDetailScreen } from './components/call-detail/CallDetailScreen'
+import { CarPlayShell } from './components/carplay/CarPlayShell'
 import { TaskDashboardScreen } from './components/dashboard/TaskDashboardScreen'
 import { DirectorCallReviewScreen } from './components/director/DirectorCallReviewScreen'
 import { GroupsScreen } from './components/groups/GroupsScreen'
@@ -17,6 +18,7 @@ type Screen =
   | 'director'
   | 'dashboard'
   | 'analytics'
+  | 'carplay'
 
 // Dev-only screen switcher — there's no router yet, so this is scaffolding
 // to reach the built screens, not part of the Check Up design system.
@@ -24,7 +26,11 @@ function App() {
   const [screen, setScreen] = useState<Screen>('feed')
 
   const showSwitcher =
-    screen === 'feed' || screen === 'groups' || screen === 'dashboard' || screen === 'analytics'
+    screen === 'feed' ||
+    screen === 'groups' ||
+    screen === 'dashboard' ||
+    screen === 'analytics' ||
+    screen === 'carplay'
 
   return (
     <div className="relative">
@@ -80,6 +86,15 @@ function App() {
           >
             Analytics
           </button>
+          <button
+            type="button"
+            onClick={() => setScreen('carplay')}
+            className={`type-caption-sm rounded-full px-md py-xs ${
+              screen === 'carplay' ? 'bg-surface text-ink' : 'text-mute'
+            }`}
+          >
+            CarPlay
+          </button>
         </div>
       )}
 
@@ -93,6 +108,7 @@ function App() {
       {screen === 'director' && <DirectorCallReviewScreen onBack={() => setScreen('feed')} />}
       {screen === 'dashboard' && <TaskDashboardScreen />}
       {screen === 'analytics' && <AnalyticsDashboardScreen />}
+      {screen === 'carplay' && <CarPlayShell />}
     </div>
   )
 }
