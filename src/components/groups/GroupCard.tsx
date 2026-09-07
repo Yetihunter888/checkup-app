@@ -1,4 +1,6 @@
+import { ContactTypeIcon } from './ContactTypeIcon'
 import { GroupKindBadge } from './GroupKindBadge'
+import { MemberStatusBreakdown } from './MemberStatusBreakdown'
 import type { Group } from '../../types/groups'
 
 function SelectionMark({ selected }: { selected: boolean }) {
@@ -49,13 +51,18 @@ export function GroupCard({
       {mode === 'select' && <SelectionMark selected={selected} />}
 
       <div className="flex w-full flex-col gap-xxs pr-6">
-        <span className="type-card-title text-ink">{group.name}</span>
+        <div className="flex items-center gap-xs text-mute">
+          <ContactTypeIcon type={group.contactType} />
+          <span className="type-card-title text-ink">{group.name}</span>
+        </div>
         {group.kind === 'dynamic' && <GroupKindBadge />}
       </div>
 
       <span className="type-body-sm text-mute">
         {group.members.length} {group.members.length === 1 ? 'member' : 'members'}
       </span>
+
+      <MemberStatusBreakdown members={group.members} />
 
       <div className="flex flex-col gap-xxs">
         <span className="type-caption-md text-mute">{group.metric.label}</span>

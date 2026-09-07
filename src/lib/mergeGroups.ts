@@ -20,6 +20,10 @@ export function mergeGroups(a: Group, b: Group, mergedName: string): Group {
     name: mergedName,
     kind: 'static',
     metric: averageMetric(a.metric, b.metric),
+    // Inherits the first group's contact type — there's no meaningful way
+    // to "average" Inbound Call and Email, so this picks one deterministically
+    // rather than guessing at a rule the product hasn't defined.
+    contactType: a.contactType,
     members: Array.from(memberMap.values()),
   }
 }
