@@ -4,7 +4,7 @@ import { PriorityBadge } from './PriorityBadge'
 import { SectionHeader } from './SectionHeader'
 import { TaskItemCard } from './TaskItemCard'
 import { NoteBadge } from '../ui/NoteBadge'
-import { mockEscalations } from '../../data/mockEscalations'
+import { useEscalations } from '../../data/escalationsStore'
 
 const ACCENT_BY_PRIORITY: Record<string, string> = {
   high: 'bg-status-escalation',
@@ -21,7 +21,8 @@ export function EscalationsSection({
   onComplete: (id: string) => void
   priorityFilter?: 'all' | 'high'
 }) {
-  const allEscalations = mockEscalations.filter((item) => !completedIds.has(item.id))
+  const escalationRecords = useEscalations()
+  const allEscalations = escalationRecords.filter((item) => !completedIds.has(item.id))
   const escalations = allEscalations.filter((item) => priorityFilter === 'all' || item.priority === 'high')
 
   return (

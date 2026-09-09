@@ -6,9 +6,9 @@ function daysFromNow(days: number) {
   return date.toISOString()
 }
 
-// Not wired to LiveInterventionScreen's actual takeover action (that state
-// is local/ephemeral today) — this is mock data standing in for a future
-// "takeover completed" event log, same as the other mock datasets.
+// Seed rows for escalationsStore.ts — real takeovers from
+// LiveInterventionScreen get prepended to this list at runtime via
+// addEscalation, the same shared-store pattern as supervisorTagsStore.ts.
 export const mockEscalations: EscalationRecord[] = [
   {
     id: 'esc-1',

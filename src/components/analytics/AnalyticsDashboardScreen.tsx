@@ -23,7 +23,7 @@ const DEFAULT_FILTERS: AnalyticsFilters = {
 
 export function AnalyticsDashboardScreen({ onNavigateTab }: { onNavigateTab: (tab: TabId) => void }) {
   const [filters, setFilters] = useState<AnalyticsFilters>(DEFAULT_FILTERS)
-  const [selectedKpiId, setSelectedKpiId] = useState(kpis[3].id) // QA Average by default
+  const [selectedKpiId, setSelectedKpiId] = useState(kpis[3].id) // QA Reviews Completed by default
 
   /**
    * Every one of the five filters feeds a deterministic hash (see
@@ -39,8 +39,8 @@ export function AnalyticsDashboardScreen({ onNavigateTab }: { onNavigateTab: (ta
     const labels = filters.dateRange === '7d' ? DAILY_LABELS : WEEKLY_LABELS
     return kpis.map((kpi) => {
       // "All Teams / All Groups / All Types / All Channels" shows the
-      // real unmodified value — QA Average must read exactly the true
-      // 12-of-15 figure here, not a hash-nudged approximation of it.
+      // real unmodified value — QA Reviews Completed must read exactly the
+      // true 12-of-15 figure here, not a hash-nudged approximation of it.
       const variationSeed = `${kpi.id}|${filters.team}|${filters.group}|${filters.callType}|${filters.channel}`
       const factor = isUnfiltered ? 0 : filterVariation(variationSeed)
       const adjustedCurrent = kpi.currentValue * (1 + factor)

@@ -4,6 +4,7 @@ import { LiveBanner } from './LiveBanner'
 import { TakeoverConfirmSheet } from './TakeoverConfirmSheet'
 import { BackButton } from '../ui/BackButton'
 import { StatusBadge } from '../ui/StatusBadge'
+import { addEscalation } from '../../data/escalationsStore'
 import { currentSentiment, issueSummary, lastThreeNotes, liveCall } from '../../data/mockIntervention'
 import { formatDuration } from '../../lib/format'
 import type { InterventionMode, Platform } from '../../types/intervention'
@@ -24,6 +25,17 @@ export function LiveInterventionScreen({ onBack }: { onBack: () => void }) {
 
   const isCarPlay = platform === 'carplay'
   const bannerMode = mode === 'takeover-confirm' ? 'listen' : mode
+
+  function confirmTakeover() {
+    addEscalation({
+      id: `esc-${Date.now()}`,
+      agentName: liveCall.agentName,
+      reason: `Takeover completed after ${formatDuration(durationSeconds)} on the call — ${issueSummary}`,
+      dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
+      priority: 'high',
+    })
+    setMode('takeover-active')
+  }
 
   return (
     <div className={`flex h-dvh flex-col ${isCarPlay ? 'bg-surface-sunken' : 'bg-canvas-dark'}`}>
@@ -94,7 +106,7 @@ export function LiveInterventionScreen({ onBack }: { onBack: () => void }) {
           issueSummary={issueSummary}
           notes={lastThreeNotes}
           onCancel={() => setMode('listen')}
-          onConfirm={() => setMode('takeover-active')}
+          onConfirm={confirmTakeover}
         />
       )}
     </div>
