@@ -26,6 +26,15 @@ export function SavedViewChip({
   )
 }
 
+/** `chip-filter` from DESIGN-checkup.md, without the value/chevron — a plain static label pill for tags like skills or certifications. */
+export function Chip({ children }: { children: ReactNode }) {
+  return (
+    <span className="type-body-sm inline-flex shrink-0 items-center rounded-full bg-surface-elevated px-md py-[6px] text-ink">
+      {children}
+    </span>
+  )
+}
+
 /** `chip-filter` from DESIGN-checkup.md — static filter affordance (team / group / metric). */
 export function FilterChip({ label, value }: { label: string; value: string }) {
   return (

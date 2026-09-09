@@ -9,11 +9,13 @@ import type { Supervisor, TagPriority } from '../../types/director'
 /** Elevation level 3 (shadow-modal) — same bottom-sheet pattern used for merge/takeover confirmations. */
 export function TagSupervisorSheet({
   agentName,
+  agentId,
   callId,
   onCancel,
   onSubmitted,
 }: {
   agentName: string
+  agentId: string
   callId: string
   onCancel: () => void
   onSubmitted: (supervisorName: string) => void
@@ -36,6 +38,7 @@ export function TagSupervisorSheet({
       dueDate: dueDate || null,
       createdAt: new Date().toISOString(),
       agentName,
+      agentId,
       callId,
     })
     onSubmitted(selected.name)

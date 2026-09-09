@@ -10,8 +10,21 @@ function toXY(index: number, count: number, score: number) {
   return [x, y] as const
 }
 
-/** Compares this in-progress score against the agent's last 5 — the current point is live and dashed-in, the rest are settled history. */
-export function TrendSparkline({ history, currentScore }: { history: TrendPoint[]; currentScore: number }) {
+/**
+ * Compares this in-progress score against the agent's last 5 — the current
+ * point is live and dashed-in, the rest are settled history. `caption`
+ * defaults to the QA Scoring screen's own wording; Agent Profile (which has
+ * no "this call" to compare against) passes its own.
+ */
+export function TrendSparkline({
+  history,
+  currentScore,
+  caption = 'vs. this call',
+}: {
+  history: TrendPoint[]
+  currentScore: number
+  caption?: string
+}) {
   const points = [...history, { label: 'Now', score: currentScore }]
   const coords = points.map((point, index) => toXY(index, points.length, point.score))
 
@@ -26,7 +39,7 @@ export function TrendSparkline({ history, currentScore }: { history: TrendPoint[
     <div className="flex flex-col gap-xs rounded-lg bg-surface p-lg">
       <div className="flex items-center justify-between">
         <span className="type-caption-md text-mute">Last 5 Scores</span>
-        <span className="type-caption-sm text-mute">vs. this call</span>
+        <span className="type-caption-sm text-mute">{caption}</span>
       </div>
       <svg width="100%" viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="overflow-visible">
         <path d={historyPath} fill="none" className="stroke-stone" strokeWidth="2" />

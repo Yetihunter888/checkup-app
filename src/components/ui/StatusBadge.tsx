@@ -1,4 +1,5 @@
 import type { CallStatus } from '../../types/live-feed'
+import type { MemberStatus } from '../../types/groups'
 
 /** Exported so other components (e.g. CallRow's accent bar) can reuse the exact same status→color mapping rather than duplicating it. */
 export const STATUS_CONFIG: Record<CallStatus, { label: string; dot: string; text: string }> = {
@@ -6,6 +7,25 @@ export const STATUS_CONFIG: Record<CallStatus, { label: string; dot: string; tex
   hold: { label: 'On Hold', dot: 'bg-status-hold', text: 'text-status-hold' },
   transferring: { label: 'Transferring', dot: 'bg-status-hold', text: 'text-status-hold' },
   silence: { label: 'Silence', dot: 'bg-status-silence', text: 'text-status-silence' },
+}
+
+/**
+ * Same status-color vocabulary MemberStatusBreakdown already established
+ * for group cards (available/on-call -> live, wrap-up -> hold, unavailable
+ * -> silence, not-logged-in -> ash) — reused here so Agent Profile's status
+ * badge agrees with the group list it was opened from.
+ */
+export const MEMBER_STATUS_CONFIG: Record<MemberStatus, { label: string; dot: string; text: string }> = {
+  available: { label: 'Available', dot: 'bg-status-live', text: 'text-status-live' },
+  'on-call': { label: 'On Call', dot: 'bg-status-live', text: 'text-status-live' },
+  'wrap-up': { label: 'Wrap Up', dot: 'bg-status-hold', text: 'text-status-hold' },
+  unavailable: { label: 'Unavailable', dot: 'bg-status-silence', text: 'text-status-silence' },
+  'not-logged-in': { label: 'Not Logged In', dot: 'bg-ash', text: 'text-ash' },
+}
+
+const COMBINED_STATUS_CONFIG: Record<CallStatus | MemberStatus, { label: string; dot: string; text: string }> = {
+  ...STATUS_CONFIG,
+  ...MEMBER_STATUS_CONFIG,
 }
 
 type BadgeSize = 'default' | 'carplay'
@@ -21,8 +41,8 @@ function badgeTypeClass(size: BadgeSize) {
 }
 
 /** `status-badge` component from DESIGN-checkup.md: transparent pill, colored text + leading dot. */
-export function StatusBadge({ status, size = 'default' }: { status: CallStatus; size?: BadgeSize }) {
-  const config = STATUS_CONFIG[status]
+export function StatusBadge({ status, size = 'default' }: { status: CallStatus | MemberStatus; size?: BadgeSize }) {
+  const config = COMBINED_STATUS_CONFIG[status]
   return (
     <span
       className={`${badgeTypeClass(size)} inline-flex shrink-0 items-center gap-xs whitespace-nowrap rounded-full px-sm py-[3px] ${config.text}`}

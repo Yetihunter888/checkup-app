@@ -12,6 +12,8 @@ export interface Comment {
   /** ISO timestamp of when the note was added — distinct from timestampSeconds, which is the note's position in the call. */
   createdAt: string
   text: string
+  /** GroupMember.id of the agent this note is about — lets Agent Profile pull real linked history instead of a disconnected list. */
+  agentId: string
 }
 
 export interface SilenceRange {
@@ -51,6 +53,8 @@ export interface QaQuota {
 export interface CallDetail {
   id: string
   agentName: string
+  /** GroupMember.id of the agent on this call. */
+  agentId: string
   customerName: string
   durationSeconds: number
   qaQuota: QaQuota

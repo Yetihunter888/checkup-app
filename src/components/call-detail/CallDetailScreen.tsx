@@ -76,6 +76,7 @@ export function CallDetailScreen({
       authorName: 'You',
       createdAt: new Date().toISOString(),
       text,
+      agentId: call.agentId,
     }
     setComments((current) => [...current, comment])
     setActiveCommentId(comment.id)

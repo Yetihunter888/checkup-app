@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { Avatar } from '../ui/Avatar'
 import { BackButton } from '../ui/BackButton'
 import { GroupKindBadge } from './GroupKindBadge'
 import { MemberRow } from './MemberRow'
-import type { Group } from '../../types/groups'
+import { AgentProfileScreen } from '../agent-profile/AgentProfileScreen'
+import type { Group, GroupMember } from '../../types/groups'
 
 const STACK_PREVIEW_COUNT = 4
 
@@ -15,8 +17,13 @@ export function GroupDetailScreen({
   onBack: () => void
   onAddMembers: () => void
 }) {
+  const [selectedMember, setSelectedMember] = useState<GroupMember | null>(null)
   const preview = group.members.slice(0, STACK_PREVIEW_COUNT)
   const overflow = group.members.length - preview.length
+
+  if (selectedMember) {
+    return <AgentProfileScreen member={selectedMember} onBack={() => setSelectedMember(null)} />
+  }
 
   return (
     <div className="flex flex-col gap-lg">
@@ -68,7 +75,7 @@ export function GroupDetailScreen({
           {group.members.length} {group.members.length === 1 ? 'member' : 'members'}
         </span>
         {group.members.map((member) => (
-          <MemberRow key={member.id} member={member} />
+          <MemberRow key={member.id} member={member} onSelect={setSelectedMember} />
         ))}
       </div>
     </div>

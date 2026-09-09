@@ -30,7 +30,9 @@ export function LiveInterventionScreen({ onBack }: { onBack: () => void }) {
     addEscalation({
       id: `esc-${Date.now()}`,
       agentName: liveCall.agentName,
+      agentId: liveCall.agentId,
       reason: `Takeover completed after ${formatDuration(durationSeconds)} on the call — ${issueSummary}`,
+      createdAt: new Date().toISOString(),
       dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
       priority: 'high',
     })

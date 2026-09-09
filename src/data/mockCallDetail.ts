@@ -6,6 +6,7 @@ import type { CallDetail } from '../types/call-detail'
 export const mockCallDetail: CallDetail = {
   id: 'c-1',
   agentName: 'Maria Alvarez',
+  agentId: 'm-maria',
   customerName: 'Customer — Diane R.',
   durationSeconds: 312,
   qaQuota: { completed: 12, total: 15 },
@@ -44,6 +45,7 @@ export const mockCallDetail: CallDetail = {
       authorName: 'AI',
       createdAt: '2026-09-03T14:32:00',
       text: 'Agent skipped the standard greeting disclosure — worth a coaching note on call openings.',
+      agentId: 'm-maria',
     },
     {
       id: 'cm-2',
@@ -53,6 +55,7 @@ export const mockCallDetail: CallDetail = {
       authorName: 'Jamie Torres',
       createdAt: '2026-09-04T10:05:00',
       text: "Great empathy statement — acknowledged the customer's frustration before explaining the fee.",
+      agentId: 'm-maria',
     },
     {
       id: 'cm-3',
@@ -62,6 +65,7 @@ export const mockCallDetail: CallDetail = {
       authorName: 'AI',
       createdAt: '2026-09-03T14:32:00',
       text: 'Identity verification was not confirmed before account details were discussed.',
+      agentId: 'm-maria',
     },
     {
       id: 'cm-4',
@@ -71,6 +75,7 @@ export const mockCallDetail: CallDetail = {
       authorName: 'Alicia Grant',
       createdAt: '2026-09-05T16:20:00',
       text: 'Customer threatened to cancel. Please review with Maria this week.',
+      agentId: 'm-maria',
     },
   ],
 }

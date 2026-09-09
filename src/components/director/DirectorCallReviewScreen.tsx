@@ -161,6 +161,7 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
       {sheet === 'form' && (
         <TagSupervisorSheet
           agentName={call.agentName}
+          agentId={call.agentId}
           callId={call.id}
           onCancel={() => setSheet('closed')}
           onSubmitted={(supervisorName) => {
