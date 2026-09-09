@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { ReviewOnlyBadge } from './ReviewOnlyBadge'
 import { TagConfirmation } from './TagConfirmation'
 import { TagSupervisorSheet } from './TagSupervisorSheet'
+import { AgentStateTrack } from '../call-detail/AgentStateTrack'
 import { CommentFeed } from '../call-detail/CommentFeed'
 import { PlaybackControls } from '../call-detail/PlaybackControls'
-import { SentimentTrack } from '../call-detail/SentimentTrack'
+import { SentimentStoryTrack } from '../call-detail/SentimentStoryTrack'
 import { Waveform } from '../call-detail/Waveform'
 import { BackButton } from '../ui/BackButton'
 import { mockCallDetail } from '../../data/mockCallDetail'
@@ -30,6 +31,13 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
   const [hoveredCommentId, setHoveredCommentId] = useState<string | null>(null)
   const [sheet, setSheet] = useState<SheetState>('closed')
   const [taggedSupervisor, setTaggedSupervisor] = useState('')
+  // TEST-ONLY toggle, not a real product state: this screen is a recorded
+  // call (see ReviewOnlyBadge) and a Director never has a live call to
+  // review, per the persona rules already verified elsewhere in this app.
+  // This exists solely to build and demonstrate Waveform's isLive capability
+  // — flipping it also auto-starts playback so the growing timestamp is
+  // visible without a second click.
+  const [liveModeForTesting, setLiveModeForTesting] = useState(false)
 
   useEffect(() => {
     if (!isPlaying) return
@@ -78,6 +86,20 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
           <ReviewOnlyBadge />
           <span className="type-heading-md text-ink">{call.agentName}</span>
           <span className="type-body-sm text-mute">{call.customerName}</span>
+          <button
+            type="button"
+            onClick={() => {
+              const next = !liveModeForTesting
+              setLiveModeForTesting(next)
+              if (next) setIsPlaying(true)
+            }}
+            className={`type-caption-sm w-fit shrink-0 rounded-full px-sm py-[3px] transition-colors ${
+              liveModeForTesting ? 'bg-status-live/15 text-status-live' : 'bg-surface-elevated text-mute'
+            }`}
+            title="Test-only: simulates a live call to verify the growing timestamp"
+          >
+            {liveModeForTesting ? 'Simulating Live' : 'Simulate Live (test)'}
+          </button>
         </div>
 
         <div className="flex flex-col gap-sm">
@@ -88,6 +110,7 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
             silenceRanges={call.silenceRanges}
             activeCommentId={activeCommentId}
             hoveredCommentId={hoveredCommentId}
+            isLive={liveModeForTesting}
             onSeek={seekTo}
             onSelectComment={(id) => {
               const comment = call.comments.find((c) => c.id === id)
@@ -95,7 +118,12 @@ export function DirectorCallReviewScreen({ onBack }: { onBack: () => void }) {
             }}
             onHoverComment={setHoveredCommentId}
           />
-          <SentimentTrack segments={call.sentimentTrack} durationSeconds={call.durationSeconds} />
+          <SentimentStoryTrack
+            checkpoints={call.sentimentCheckpoints}
+            durationSeconds={call.durationSeconds}
+            onSeek={seekTo}
+          />
+          <AgentStateTrack segments={call.agentStateTrack} durationSeconds={call.durationSeconds} />
         </div>
 
         <PlaybackControls

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { AddCommentBar } from './AddCommentBar'
+import { AgentStateTrack } from './AgentStateTrack'
 import { CallDetailHeader } from './CallDetailHeader'
 import { CommentFeed } from './CommentFeed'
 import { PlaybackControls } from './PlaybackControls'
-import { SentimentTrack } from './SentimentTrack'
+import { SentimentStoryTrack } from './SentimentStoryTrack'
 import { Waveform } from './Waveform'
 import { BottomTabBar } from '../layout/BottomTabBar'
 import type { TabId } from '../layout/BottomTabBar'
@@ -109,6 +110,7 @@ export function CallDetailScreen({
             silenceRanges={call.silenceRanges}
             activeCommentId={activeCommentId}
             hoveredCommentId={hoveredCommentId}
+            isLive={false}
             onSeek={seekTo}
             onSelectComment={(id) => {
               const comment = comments.find((c) => c.id === id)
@@ -116,7 +118,12 @@ export function CallDetailScreen({
             }}
             onHoverComment={setHoveredCommentId}
           />
-          <SentimentTrack segments={call.sentimentTrack} durationSeconds={call.durationSeconds} />
+          <SentimentStoryTrack
+            checkpoints={call.sentimentCheckpoints}
+            durationSeconds={call.durationSeconds}
+            onSeek={seekTo}
+          />
+          <AgentStateTrack segments={call.agentStateTrack} durationSeconds={call.durationSeconds} />
         </div>
 
         <PlaybackControls

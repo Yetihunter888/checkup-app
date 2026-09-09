@@ -1,5 +1,4 @@
 import type { NoteAuthor } from '../components/ui/NoteBadge'
-import type { Sentiment } from './live-feed'
 
 export type CommentTag = 'coaching' | 'great-win' | 'compliance-risk' | 'escalation' | 'policy-error'
 
@@ -20,10 +19,28 @@ export interface SilenceRange {
   endSeconds: number
 }
 
-export interface SentimentSegment {
+/**
+ * A distinct mood axis from the shared `Sentiment` type (live-feed's
+ * positive/neutral/negative) — "shifting" is a real third state ("trending
+ * uncertain"), not a renamed "neutral" ("no signal"), so it's kept separate
+ * rather than extending `Sentiment` with a case its other consumers
+ * (SentimentDot, live-feed rows) have no data for.
+ */
+export type SentimentMood = 'positive' | 'shifting' | 'negative'
+
+/** A single checkpoint in the call's sentiment story — a point in time, not a range. */
+export interface SentimentCheckpoint {
+  timestampSeconds: number
+  mood: SentimentMood
+}
+
+/** Agent's actual state at a point in the call — drives the track below the waveform. */
+export type AgentState = 'talking' | 'hold' | 'silence'
+
+export interface StateSegment {
   startSeconds: number
   endSeconds: number
-  sentiment: Sentiment
+  state: AgentState
 }
 
 export interface QaQuota {
@@ -39,5 +56,6 @@ export interface CallDetail {
   qaQuota: QaQuota
   comments: Comment[]
   silenceRanges: SilenceRange[]
-  sentimentTrack: SentimentSegment[]
+  agentStateTrack: StateSegment[]
+  sentimentCheckpoints: SentimentCheckpoint[]
 }

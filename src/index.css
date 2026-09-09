@@ -47,6 +47,11 @@
   --color-sentiment-positive: #34c759;
   --color-sentiment-neutral: #8b93a3;
   --color-sentiment-negative: #ff6b57;
+  /* Distinct from status-hold (#f2b705) on purpose — the two now sit
+     stacked on the same waveform (agent-state track below, sentiment-story
+     track above), so sharing a hex would blur "on hold" with "sentiment
+     shifting." See DESIGN-checkup.md's Sentiment section. */
+  --color-sentiment-shifting: #ffe066;
 
   /* ---- Authorship (AI / Supervisor / Director) ---- */
   --color-note-ai: #a78bfa;

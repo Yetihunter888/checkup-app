@@ -9,12 +9,32 @@ export const mockCallDetail: CallDetail = {
   customerName: 'Customer — Diane R.',
   durationSeconds: 312,
   qaQuota: { completed: 12, total: 15 },
-  sentimentTrack: [
-    { startSeconds: 0, endSeconds: 80, sentiment: 'neutral' },
-    { startSeconds: 80, endSeconds: 270, sentiment: 'negative' },
-    { startSeconds: 270, endSeconds: 312, sentiment: 'neutral' },
+  // Agent's actual state across the call — talking is the default; the two
+  // exceptions below are deliberately placed to double as test fixtures:
+  // a hold segment (95-118s) and a silence segment 20s+ long (210-233s,
+  // 23s), matching silenceRanges below exactly so the dead-air overlay,
+  // skip-silence playback, and this state track never disagree.
+  agentStateTrack: [
+    { startSeconds: 0, endSeconds: 95, state: 'talking' },
+    { startSeconds: 95, endSeconds: 118, state: 'hold' },
+    { startSeconds: 118, endSeconds: 210, state: 'talking' },
+    { startSeconds: 210, endSeconds: 233, state: 'silence' },
+    { startSeconds: 233, endSeconds: 312, state: 'talking' },
   ],
-  silenceRanges: [{ startSeconds: 210, endSeconds: 225 }],
+  // Checkpoints starting at 10s, every 50s after — a clear
+  // positive -> shifting -> negative story matching the call's own
+  // narrative (fine at first, wobbling after the hold, negative once the
+  // long silence and the escalation comment at 238s land).
+  sentimentCheckpoints: [
+    { timestampSeconds: 10, mood: 'positive' },
+    { timestampSeconds: 60, mood: 'positive' },
+    { timestampSeconds: 110, mood: 'shifting' },
+    { timestampSeconds: 160, mood: 'shifting' },
+    { timestampSeconds: 210, mood: 'negative' },
+    { timestampSeconds: 260, mood: 'negative' },
+    { timestampSeconds: 310, mood: 'negative' },
+  ],
+  silenceRanges: [{ startSeconds: 210, endSeconds: 233 }],
   comments: [
     {
       id: 'cm-1',
