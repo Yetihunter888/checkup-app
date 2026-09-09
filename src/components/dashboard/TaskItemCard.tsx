@@ -33,7 +33,7 @@ export function TaskItemCard({
           type="button"
           onClick={onComplete}
           aria-label={`Mark "${title}" complete`}
-          className="mt-[2px] flex size-6 shrink-0 items-center justify-center rounded-full border border-hairline-strong text-transparent transition-colors hover:border-primary hover:bg-primary-pale hover:text-primary"
+          className="mt-xxs flex size-6 shrink-0 items-center justify-center rounded-full border border-hairline-strong text-transparent transition-colors hover:border-primary hover:bg-primary-pale hover:text-primary"
         >
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none">
             <path d="M1 5l3.2 3.2L11 1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />

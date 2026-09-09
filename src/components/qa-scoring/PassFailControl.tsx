@@ -1,3 +1,4 @@
+import { SegmentedControl } from '../ui/SegmentedControl'
 import type { PassFailValue } from '../../types/qa-scoring'
 
 /**
@@ -14,25 +15,13 @@ export function PassFailControl({
   onChoose: (value: PassFailValue) => void
 }) {
   return (
-    <div className="inline-flex overflow-hidden rounded-full bg-surface-elevated p-[3px]">
-      <button
-        type="button"
-        onClick={() => onChoose('pass')}
-        className={`type-button-sm flex h-8 items-center justify-center rounded-full px-lg transition-colors ${
-          value === 'pass' ? 'bg-primary text-on-primary' : 'text-mute'
-        }`}
-      >
-        Pass
-      </button>
-      <button
-        type="button"
-        onClick={() => onChoose('fail')}
-        className={`type-button-sm flex h-8 items-center justify-center rounded-full px-lg transition-colors ${
-          value === 'fail' ? 'bg-status-escalation text-on-primary' : 'text-mute'
-        }`}
-      >
-        Fail
-      </button>
-    </div>
+    <SegmentedControl
+      value={value}
+      onChange={onChoose}
+      options={[
+        { value: 'pass', label: 'Pass', activeClassName: 'bg-primary text-on-primary' },
+        { value: 'fail', label: 'Fail', activeClassName: 'bg-status-escalation text-on-primary' },
+      ]}
+    />
   )
 }
