@@ -1,6 +1,10 @@
 export function formatDuration(totalSeconds: number) {
-  const minutes = Math.floor(totalSeconds / 60)
-  const seconds = totalSeconds % 60
+  // Floored here, not just at call sites — a live-ticking clock (0.25s
+  // steps) can hand this a fractional value, and "0:3.5" is a real bug
+  // that surfaced from exactly that, not a hypothetical one.
+  const whole = Math.floor(totalSeconds)
+  const minutes = Math.floor(whole / 60)
+  const seconds = whole % 60
   return `${minutes}:${seconds.toString().padStart(2, '0')}`
 }
 

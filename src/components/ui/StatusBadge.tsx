@@ -1,6 +1,7 @@
 import type { CallStatus } from '../../types/live-feed'
 
-const STATUS_CONFIG: Record<CallStatus, { label: string; dot: string; text: string }> = {
+/** Exported so other components (e.g. CallRow's accent bar) can reuse the exact same status→color mapping rather than duplicating it. */
+export const STATUS_CONFIG: Record<CallStatus, { label: string; dot: string; text: string }> = {
   talking: { label: 'Talking', dot: 'bg-status-live', text: 'text-status-live' },
   hold: { label: 'On Hold', dot: 'bg-status-hold', text: 'text-status-hold' },
   transferring: { label: 'Transferring', dot: 'bg-status-hold', text: 'text-status-hold' },

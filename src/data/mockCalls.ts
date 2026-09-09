@@ -7,9 +7,13 @@ export const queueHealth: QueueHealth = {
   slaRisk: 2,
 }
 
+// "My Team" first — a supervisor landing on this screen should see their
+// own team by default, not the unfiltered fleet-wide list. Since
+// LiveCallFeedScreen defaults to savedViews[0].id, this order also sets
+// the default selected view.
 export const savedViews: SavedView[] = [
-  { id: 'all', label: 'All Calls' },
   { id: 'my-team', label: 'My Team' },
+  { id: 'all', label: 'All Calls' },
   { id: 'escalations', label: 'Escalations Only' },
 ]
 

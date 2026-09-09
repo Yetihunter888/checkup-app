@@ -1,11 +1,21 @@
-import { useRef } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { TAG_CONFIG } from './tagColors'
 import { generateBarHeights } from './waveformShape'
-import { formatNoteDate } from '../../lib/format'
+import { formatDuration, formatNoteDate } from '../../lib/format'
 import type { Comment, SilenceRange } from '../../types/call-detail'
 
-const BAR_COUNT = 90
-const BAR_HEIGHTS = generateBarHeights(BAR_COUNT)
+// A classic thin/spiky audio-editor waveform, not a bar chart: fixed 1px
+// bars with a fixed 2px gap, not flex-1 auto-fill bars. Since the pixel
+// size is fixed rather than computed from the container, the bar COUNT has
+// to be measured from the track's actual rendered width — otherwise either
+// the bars stop short of the panel's edge (container wider than expected)
+// or overflow past it (container narrower), and in the overflow case the
+// bars for the back half of the call would get clipped while the
+// percentage-positioned markers/playhead for that same time range would
+// not, visibly mismatching the two.
+const BAR_WIDTH_PX = 1
+const BAR_GAP_PX = 2
+const FALLBACK_BAR_COUNT = 100
 
 function pct(seconds: number, duration: number) {
   return `${(seconds / duration) * 100}%`
@@ -26,6 +36,7 @@ export function Waveform({
   silenceRanges,
   activeCommentId,
   hoveredCommentId,
+  isLive,
   onSeek,
   onSelectComment,
   onHoverComment,
@@ -36,11 +47,32 @@ export function Waveform({
   silenceRanges: SilenceRange[]
   activeCommentId: string | null
   hoveredCommentId: string | null
+  /** True only for a call still actively being monitored — the right-hand timestamp then tracks currentTimeSeconds and keeps growing, instead of showing a fixed end time. Both existing screens (Call Detail, Director Review) are post-call recordings, so they pass false. */
+  isLive: boolean
   onSeek: (seconds: number) => void
   onSelectComment: (id: string) => void
   onHoverComment: (id: string | null) => void
 }) {
   const trackRef = useRef<HTMLDivElement>(null)
+  const [barCount, setBarCount] = useState(FALLBACK_BAR_COUNT)
+
+  useLayoutEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    function measure(width: number) {
+      const unit = BAR_WIDTH_PX + BAR_GAP_PX
+      setBarCount(Math.max(1, Math.floor((width + BAR_GAP_PX) / unit)))
+    }
+
+    measure(track.getBoundingClientRect().width)
+
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width))
+    observer.observe(track)
+    return () => observer.disconnect()
+  }, [])
+
+  const barHeights = useMemo(() => generateBarHeights(barCount), [barCount])
 
   function handleSeekClick(event: React.MouseEvent<HTMLDivElement>) {
     const track = trackRef.current
@@ -58,7 +90,8 @@ export function Waveform({
       <div
         ref={trackRef}
         onClick={handleSeekClick}
-        className="relative flex h-24 w-full cursor-pointer items-end gap-[1px] pt-6"
+        className="relative flex h-24 w-full cursor-pointer items-end pt-6"
+        style={{ gap: `${BAR_GAP_PX}px` }}
       >
         {silenceRanges.map((range, index) => (
           <div
@@ -71,14 +104,14 @@ export function Waveform({
           />
         ))}
 
-        {BAR_HEIGHTS.map((height, index) => {
-          const barRatio = index / BAR_COUNT
+        {barHeights.map((height, index) => {
+          const barRatio = index / barCount
           const played = barRatio <= playedRatio
           return (
             <div
               key={index}
-              className={`flex-1 rounded-full ${played ? 'bg-ink' : 'bg-stone'}`}
-              style={{ height: `${height * 100}%` }}
+              className={`shrink-0 ${played ? 'bg-ink' : 'bg-stone'}`}
+              style={{ width: `${BAR_WIDTH_PX}px`, height: `${height * 100}%` }}
             />
           )
         })}
@@ -125,6 +158,13 @@ export function Waveform({
             <span className="type-caption-sm text-mute">{formatNoteDate(hoveredComment.createdAt)}</span>
           </div>
         )}
+      </div>
+
+      <div className="flex items-center justify-between pt-xs">
+        <span className="type-caption-sm text-mute">0:00</span>
+        <span className="type-caption-sm text-mute">
+          {formatDuration(isLive ? currentTimeSeconds : durationSeconds)}
+        </span>
       </div>
     </div>
   )
